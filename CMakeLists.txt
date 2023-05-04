@@ -1,0 +1,25 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(FVM3D_MPI VERSION 1.0.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(MPI REQUIRED)
+message(STATUS "Run: ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${MPIEXEC_MAX_NUMPROCS} ${MPIEXEC_PREFLAGS} EXECUTABLE ${MPIEXEC_POSTFLAGS} ARGS")
+
+if (MSVC)
+    add_definitions( "/D_CRT_SECURE_NO_WARNINGS /MP /openmp" )
+endif(MSVC)
+
+file(GLOB CPP_FILES src/*.cpp)
+
+set(SOURCE_LIST ${CPP_FILES})
+
+add_executable(${PROJECT_NAME} ${SOURCE_LIST})
+target_link_libraries(${PROJECT_NAME} PUBLIC MPI::MPI_CXX)
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCE_LIST})
+
+
+
